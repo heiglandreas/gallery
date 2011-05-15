@@ -2,3 +2,10 @@ Gallery
 =======
 
 Script to display the contents of folders as gallery
+
+Requirements
+------------
+
+* PHP5.3
+* Imagemagick installed (not as PHP-Extension required)
+
