@@ -8,4 +8,4 @@ Requirements
 
 * PHP5.3
 * Imagemagick installed (not as PHP-Extension required)
-
+* Zend_Framework 1 available in the include_path
