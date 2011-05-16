@@ -32,8 +32,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Gallery</title>
-		<base href="http://development.local/gallery/src/public/"/>
+		<title><?php echo $this->translate('Gallery'); ?></title>
+		<base href="<?php echo $this->baseUrl(); ?>/"/>
 <?php echo $this->headTitle() ?>
 		<link rel="stylesheet" type="text/css" href="inc/css/gallery.css"/>
 		<link rel="stylesheet" type="text/css" href="inc/lib/lightbox/css/lightbox.css"/>

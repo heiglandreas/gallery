@@ -28,6 +28,6 @@
  * @version   GIT: $Revision: $
  * @since     15.05.2011
  */
-?><h1 id="header">Gallery</h1>
-<div id="breadcrumb"><?php echo $this->navigation()->breadcrumbs();?></div>
+?><h1 id="header"><?php echo $this->translate('Gallery'); ?></h1>
+<div id="breadcrumb"><?php echo $this->navigation()->breadcrumbs()->setLinkLast(true)->setMaxDepth(4)->setSeparator(' » ');?></div>
 <div id="navigation"><?php echo $this->navigation();?></div>

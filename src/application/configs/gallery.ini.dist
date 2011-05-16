@@ -28,7 +28,7 @@
 ;; @since     15.05.2011
 [production]
 ;; This is the path where all your images are stored currently
-imagepath = /Volumes/Daten/Bilder
+imagepath = /path/to/your/images
 ;;
 ;; Where is your imagemagick installed
 imagemagick_path = "/usr/bin"

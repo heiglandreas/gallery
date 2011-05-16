@@ -42,62 +42,105 @@
  */
 class IndexController extends Zend_Controller_Action
 {
-	protected $_finfo = null;
+    protected $_finfo = null;
 
-	public function init()
+    public function init()
     {
         /* Initialize action controller here */
+        $path = realpath(Zend_Registry::get('gallery_config')->imagepath);
+        
+        $iterator = new RecursiveDirectoryIterator($path);
+        $dirs=array (
+               'label'      => 'Home',
+               'module'     => 'default',
+               'controller' => 'index',
+               'action'     => 'index',
+               'order'      => -100,
+              );
+        $dirs['pages'] = $this->_getDirectories($iterator);
+        Zend_Registry::set('Zend_Navigation',new Zend_Navigation(array ($dirs)));
+    }
+
+    protected function _getDirectories($iterator)
+    {
+        $path = realpath(Zend_Registry::get('gallery_config')->imagepath);
+        
+        $folders = array ();
+        foreach ( $iterator as $file) {
+            if(0 === strpos($file->getFileName(),'.')){
+                continue;
+            }
+            if(!$file->isDir()){
+                continue;
+            }
+            $dir=realpath($file->getPathName());
+            $dir=substr($dir,strlen($path)+1);
+            $f = array (
+                'label' => $file->getFileName(),
+                'module' => 'default',
+                'controller' => 'index',
+                'action' => 'index',
+                'params' => array (
+                    'path' => urlencode($dir),
+                ),
+            );
+            $subdirs = $this -> _getDirectories($file);
+            if ( $subdirs){
+                $f['pages'] = $subdirs;
+            }
+            $folders[] = $f;
+        }
+        return $folders;
     }
 
     public function indexAction()
     {
         $path = realpath(Zend_Registry::get('gallery_config')->imagepath);
-		
-		$dir = $this -> getRequest () -> getParam ('path');
-		if ( ! $dir ){
-			$dir = '';
-		}
+        
+        $dir = $this -> getRequest () -> getParam ('path');
+        if ( ! $dir ){
+            $dir = '';
+        }
 
-		$dir = realpath ($path . DIRECTORY_SEPARATOR . $dir);
-	    if(0!==strpos($dir, $path)){
-			throw new UnexpectedValueException('The given path is invalid');
-		}	
-		if ( ! $dir ) {
-			throw new UnexpectedValueException('The given path could not be found');
-		}
-		$iterator = new DirectoryIterator($dir);
-		$imgs = array ();
-		$dirs = array ();
-		foreach ( $iterator as $file) {
-			if ( $file -> isDot()){
-				continue;
-			}
-			if(0 === strpos($file->getFileName(),'.')){
-				continue;
-			}
-			if($file->isDir()){
-				$dirs[substr($file->getPathName(),strlen($path) + 1)] = $file -> getFileName ();
-				continue;
-			}
-			if(!$this->_isImage($file)){
-				continue;
-			}
-			$imgs[substr($file->getPathName(),strlen($path) + 1 )] = $file->getFileName();
-		}
-		$this->view->assign('directories', $dirs);
-		$this->view->assign('images', $imgs);
+        $dir = realpath ($path . DIRECTORY_SEPARATOR . $dir);
+        if(0!==strpos($dir, $path)){
+            throw new UnexpectedValueException('The given path is invalid');
+        }   
+        if ( ! $dir ) {
+            throw new UnexpectedValueException('The given path could not be found');
+        }
+        $iterator = new DirectoryIterator($dir);
+        $imgs = array ();
+        $dirs = array ();
+        foreach ( $iterator as $file) {
+            if ( $file -> isDot()){
+                continue;
+            }
+            if(0 === strpos($file->getFileName(),'.')){
+                continue;
+            }
+            if($file->isDir()){
+                $dirs[substr($file->getPathName(),strlen($path) + 1)] = $file -> getFileName ();
+                continue;
+            }
+            if(!$this->_isImage($file)){
+                continue;
+            }
+            $imgs[substr($file->getPathName(),strlen($path) + 1 )] = $file->getFileName();
+        }
+        $this->view->assign('directories', $dirs);
+        $this->view->assign('images', $imgs);
 
     }
 
-	protected function _isImage($file)
-	{
-		if(null == $this -> _finfo ) {
-			$this -> _finfo = new Finfo ( FILEINFO_MIME_TYPE);
-		}
-		if(0!==strpos($this->_finfo->file($file->getPathName()),'image')){
-			return false;
-		}
-		return true;
-	}
+    protected function _isImage($file)
+    {
+        if(null == $this -> _finfo ) {
+            $this -> _finfo = new Finfo ( FILEINFO_MIME_TYPE);
+        }
+        if(0!==strpos($this->_finfo->file($file->getPathName()),'image')){
+            return false;
+        }
+        return true;
+    }
 }
-

@@ -28,13 +28,7 @@
  * @version   GIT: $Revision: $
  * @since     15.05.2011
  */
-?><ul id="paths">
-<?php foreach ( $this->directories as $dir => $name ) { ?>
-<li>
-	<a href="index/index/path/<?php echo urlencode($dir); ?>"><?php echo $name;?></a>
-</li>
-<?php } ?>
-</ul>
+?>
 <ul id="images">
 <?php foreach ($this->images as $img => $name){?>
 <li>
@@ -54,7 +48,7 @@
 		<tr>
 			<td>
 				<a class="basketadd icon" target="myBasket" href="basket/add/id/1/img/<?php echo base64_encode($img);?>">
-					<?php echo $this->translate('AddToBasket'); ?>
+					<?php echo $this->translate('add to basket'); ?>
 				</a>
 			</td>
 		</tr>

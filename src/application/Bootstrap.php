@@ -62,7 +62,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initTranslation()
     {
         $translate = new Zend_Translate(
-                         'ini',
+                         'xliff',
                          APPLICATION_PATH . DIRECTORY_SEPARATOR . 'locale',
                          null,
                          array('scan' => Zend_Translate::LOCALE_DIRECTORY));
