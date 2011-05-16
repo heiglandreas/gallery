@@ -19,88 +19,106 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
+ *
+ * @category  Gallery
+ * @package   Application
+ * @author    Andreas Heigl<andreas@heigl.org>
+ * @copyright 2011 Andreas Heigl<andreas@heigl.org>
+ * @license   http://www.opensource.org/licenses/mit-license MIT-License
+ * @version   GIT: $Revision: $
+ * @since     15.05.2011
+ */
+
+/**
+ * The Image-Controller
+ *
+ * This controller handles every request associated with images.
+ * Currently these are mainly the requests for retrieving the preview-
+ * images
+ *
+ * @category  Gallery
+ * @package   Application
+ * @author    Andreas Heigl<andreas@heigl.org>
+ * @copyright 2011 Andreas Heigl<andreas@heigl.org>
+ * @license   http://www.opensource.org/licenses/mit-license MIT-License
+ * @version   GIT: $Revision: $
+ * @since     15.05.2011
  */
 class ImageController extends Zend_Controller_Action
 {
-
-    public function init()
-    {
-        /* Initialize action controller here */
-    }
-
-    public function indexAction()
-    {
-        // action body
-    }
-
+    
+    /**
+     * Get the requested image in size 200x200 pixel
+     *
+     * @return void
+     */
     public function showAction()
     {
-		$base = realpath(Zend_Registry::get('gallery_config')->imagepath);
-		$image = urldecode($this->getRequest()->getParam('path'));
-	    $imagepath = realpath($base . DIRECTORY_SEPARATOR . $image);
-		if(!$imagepath){
-			throw new InvalidArgumentException('Path not found');
-		}
-		if(0!==strpos($imagepath,$base)){
-			throw new InvalidArgumentException('Image-Path invalid');
-		}
-		$options=$this->getInvokeArg('bootstrap')->getOptions();
-		$thumb = $options['tempDir'] . DIRECTORY_SEPARATOR . $image . '.png';
-		if (!file_exists($thumb)){
-
-			$folders=explode(DIRECTORY_SEPARATOR,dirname($image));
-			$folderPath = $options['tempDir'];
-			foreach ( $folders as $folder ){
-				$folderPath .= DIRECTORY_SEPARATOR . $folder;
-				if ( ! file_exists ( $folderPath ))	{
-					mkdir($folderPath, 0777 );
-				}
-			}
-			$string = '/usr/local/imagemagick/bin/convert "' . $imagepath . '" -thumbnail "200x200" -auto-orient "' . $thumb . '"';
-			exec ( $string, $result );
-		}
-		$this->_helper->viewRenderer->setNoRender();
-		$this->_helper->layout->disableLayout();
-
-		
-		$this->getResponse()->setHeader('Content-Type','image/png'); 
-		echo file_get_contents($thumb);
-	}
-
-	public function lightboxAction()
-	{
-		$base = realpath(Zend_Registry::get('gallery_config')->imagepath);
+        $this -> _getImage('200');
+    }
+    
+    /**
+     * Get the requested image in size 600x600 pixel
+     *
+     * @return void
+     */
+    public function lightboxAction()
+    {
+        $this->_getImage('600');
+    }
+    
+    /**
+     * Render the requested image in the requested size
+     *
+     * @param int $size The size of the square the image has to fit into
+     *
+     * @return void
+     */
+    protected function _getImage($size)
+    {
+        $base = realpath(Zend_Registry::get('gallery_config')->imagepath);
+        $imagemagick = realpath(Zend_Registry::get('gallery_config')->imagemagick_path
+                     . DIRECTORY_SEPARATOR
+                     . 'convert');
+        if ( ! $imagemagick ){
+            throw new UnexpectedValueException('No path to imagemagick given');
+        }
         $image = urldecode($this->getRequest()->getParam('path'));
         $imagepath = realpath($base . DIRECTORY_SEPARATOR . $image);
         if(!$imagepath){
-        	throw new InvalidArgumentException('Path not found');
+            throw new InvalidArgumentException('Path not found');
         }
         if(0!==strpos($imagepath,$base)){
             throw new InvalidArgumentException('Image-Path invalid');
         }
-	    $options=$this->getInvokeArg('bootstrap')->getOptions();
-	    $thumb = $options['tempDir'] . DIRECTORY_SEPARATOR . $image . '.600.png';
-	    if (!file_exists($thumb)){
-	    	$folders=explode(DIRECTORY_SEPARATOR,dirname($image));
-	        $folderPath = $options['tempDir'];
-	        foreach ( $folders as $folder ){
-	        	$folderPath .= DIRECTORY_SEPARATOR . $folder;
-	            if ( ! file_exists ( $folderPath )) {
-	            	mkdir($folderPath, 0777 );
-	            }
-	        }
-	        $string = '/usr/local/imagemagick/bin/convert "' . $imagepath . '" -thumbnail "600x600" -auto-orient "' . $thumb . '"';
-	        exec ( $string, $result );
-	    }
-	    $this->_helper->viewRenderer->setNoRender();
-	    $this->_helper->layout->disableLayout();
-	 
-	
-	    $this->getResponse()->setHeader('Content-Type','image/png');
-	    echo file_get_contents($thumb);
-	}
+        $options=$this->getInvokeArg('bootstrap')->getOptions();
+        $thumb = $options['tempDir'] . DIRECTORY_SEPARATOR . $image . '.' . $size . '.png';
+        if (!file_exists($thumb)){
 
+            $folders=explode(DIRECTORY_SEPARATOR,dirname($image));
+            $folderPath = $options['tempDir'];
+            foreach ( $folders as $folder ){
+                $folderPath .= DIRECTORY_SEPARATOR . $folder;
+                if ( ! file_exists ( $folderPath )) {
+                    mkdir($folderPath, 0777 );
+                }
+            }
+            $arguments = array ();
+            $arguments[] = $imagemagick;
+            $arguments[] = '"' . $imagepath . '"';
+            $arguments[] = '-thumbnail';
+            $arguments[] = '"' . $size . 'x' . $size . '"';
+            $arguments[] = '-auto-orient';
+            $arguments[] = '"' . $thumb . '"';
+            exec ( implode(' ',$arguments));
+        }
+        $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->layout->disableLayout();
 
+        
+        $this->getResponse()->setHeader('Content-Type','image/png'); 
+        readfile($thumb);
+    }
 }
 
 

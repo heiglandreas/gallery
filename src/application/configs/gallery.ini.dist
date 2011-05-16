@@ -19,8 +19,19 @@
 ;; FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 ;; DEALINGS IN THE SOFTWARE.
 ;;
+;; @category  Gallery
+;; @package   Application
+;; @author    Andreas Heigl<andreas@heigl.org>
+;; @copyright 2011 Andreas Heigl<andreas@heigl.org>
+;; @license   http://www.opensource.org/licenses/mit-license MIT-License
+;; @version   GIT: $Revision: $
+;; @since     15.05.2011
 [production]
+;; This is the path where all your images are stored currently
 imagepath = /Volumes/Daten/Bilder
+;;
+;; Where is your imagemagick installed
+imagemagick_path = "/usr/bin"
 
 [development : production]
 

@@ -19,30 +19,52 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
+ *
+ * @category  Gallery
+ * @package   Application
+ * @author    Andreas Heigl<andreas@heigl.org>
+ * @copyright 2011 Andreas Heigl<andreas@heigl.org>
+ * @license   http://www.opensource.org/licenses/mit-license MIT-License
+ * @version   GIT: $Revision: $
+ * @since     15.05.2011
+ */
+ 
+/**
+ * The main Bootstrap-Class for the Zend-Frmaework
+ *
+ * @category  Gallery
+ * @package   Application
+ * @author    Andreas Heigl<andreas@heigl.org>
+ * @copyright 2011 Andreas Heigl<andreas@heigl.org>
+ * @license   http://www.opensource.org/licenses/mit-license MIT-License
+ * @version   GIT: $Revision: $
+ * @since     15.05.2011
  */
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
 
-	protected function _initAppConfig()
-	{
-		$config = new Zend_Config_Ini(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'gallery.ini', APPLICATION_ENV);
-		Zend_Registry::set('gallery_config', $config);
-	}
-
-
-	protected function _initExceptionHandling()
-	{
-		if('development'==APPLICATION_ENV){
-			Zend_Controller_Response_Abstract::renderExceptions();
-		}
-	}
-
-	protected function _initTranslation()
-	{
+    /**
+     * Initialize the Configuration opf the gallery
+     *
+     * @return void
+     */
+    protected function _initAppConfig()
+    {
+        $config = new Zend_Config_Ini(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'gallery.ini', APPLICATION_ENV);
+        Zend_Registry::set('gallery_config', $config);
+    }
+    
+    /**
+     * Initialize translation-handling
+     *
+     * @return void
+     */
+    protected function _initTranslation()
+    {
         $translate = new Zend_Translate(
                          'ini',
                          APPLICATION_PATH . DIRECTORY_SEPARATOR . 'locale',
-                        null,
+                         null,
                          array('scan' => Zend_Translate::LOCALE_DIRECTORY));
 
         // Eine Log Instanz erstellen
@@ -61,7 +83,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
              'log' => $log,
                   'logUntranslated' => true));
  
-    	Zend_Registry::set('Zend_Translate', $translate);
-	}
+        Zend_Registry::set('Zend_Translate', $translate);
+    }
 }
 

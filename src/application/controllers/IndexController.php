@@ -19,6 +19,26 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
+ *
+ * @category  Gallery
+ * @package   Application
+ * @author    Andreas Heigl<andreas@heigl.org>
+ * @copyright 2011 Andreas Heigl<andreas@heigl.org>
+ * @license   http://www.opensource.org/licenses/mit-license MIT-License
+ * @version   GIT: $Revision: $
+ * @since     15.05.2011
+ */
+
+/**
+ * This is the main Controller
+ *
+ * @category  Gallery
+ * @package   Application
+ * @author    Andreas Heigl<andreas@heigl.org>
+ * @copyright 2011 Andreas Heigl<andreas@heigl.org>
+ * @license   http://www.opensource.org/licenses/mit-license MIT-License
+ * @version   GIT: $Revision: $
+ * @since     15.05.2011
  */
 class IndexController extends Zend_Controller_Action
 {
