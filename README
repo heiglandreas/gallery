@@ -7,5 +7,9 @@ Requirements
 ------------
 
 * PHP5.3
-* Imagemagick installed (not as PHP-Extension required)
+ * ext/finfo
+ * ext/ZipArchive
+* Imagemagick installed (not as PHP-Extension required) 
+	and available via exec()
+* writeable log and tmp-directory
 * Zend_Framework 1 available in the include_path
