@@ -49,6 +49,9 @@ ul{
 	text-align:center;
 	vertical-align:center;
 }
+#images {
+	margin-left:210px;    
+}
 img {
 	margin:0;
 	padding:0;
@@ -71,4 +74,34 @@ img {
 	padding:0px;
 	border-collapse: collsapse;
 	border-spacing: 0;
+}
+
+#breadcrumb {
+	font-size: 12px;
+	line-height:20px;
+	height:20px;
+	margin: 5px 0;
+	background-color: rgb(232,232,232);
+	padding: 0 5px;
+}
+
+#navigation {
+	line-height:20px;
+	width:200px;
+	float:left;
+}
+
+#navigation ul ul {
+	padding-left:20px;
+}
+
+#navigation a {
+	display:block;
+	border-bottom:1px solid white;
+	padding: 0 5px;
+	background:lightgray;
+}
+a, a:link, a:hover, a:visited, a:active{
+	text-decoration:none;
+	color: inherit;
 }

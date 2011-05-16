@@ -63,8 +63,8 @@ class IndexController extends Zend_Controller_Action
 
     protected function _getDirectories($iterator)
     {
+        $iterator = new DirectoryIterator($iterator->getPathName());
         $path = realpath(Zend_Registry::get('gallery_config')->imagepath);
-        
         $folders = array ();
         foreach ( $iterator as $file) {
             if(0 === strpos($file->getFileName(),'.')){
@@ -83,7 +83,8 @@ class IndexController extends Zend_Controller_Action
                 'params' => array (
                     'path' => urlencode($dir),
                 ),
-            );
+            );  
+            
             $subdirs = $this -> _getDirectories($file);
             if ( $subdirs){
                 $f['pages'] = $subdirs;
