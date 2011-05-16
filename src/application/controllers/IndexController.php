@@ -1,23 +1,23 @@
 <?php
 /**
  * Copyright (c) 2011 Andreas Heigl<andreas@heigl.org
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a 
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the 
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
  * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  *
  * @category  Gallery
@@ -48,7 +48,7 @@ class IndexController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
         $path = realpath(Zend_Registry::get('gallery_config')->imagepath);
-        
+
         $iterator = new RecursiveDirectoryIterator($path);
         $dirs=array (
                'label'      => 'Home',
@@ -81,10 +81,10 @@ class IndexController extends Zend_Controller_Action
                 'controller' => 'index',
                 'action' => 'index',
                 'params' => array (
-                    'path' => urlencode($dir),
+                    'path' => base64_encode($dir),
                 ),
-            );  
-            
+            );
+
             $subdirs = $this -> _getDirectories($file);
             if ( $subdirs){
                 $f['pages'] = $subdirs;
@@ -97,8 +97,8 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         $path = realpath(Zend_Registry::get('gallery_config')->imagepath);
-        
-        $dir = $this -> getRequest () -> getParam ('path');
+
+        $dir = base64_decode($this->getRequest()->getParam('path'));
         if ( ! $dir ){
             $dir = '';
         }
@@ -106,7 +106,7 @@ class IndexController extends Zend_Controller_Action
         $dir = realpath ($path . DIRECTORY_SEPARATOR . $dir);
         if(0!==strpos($dir, $path)){
             throw new UnexpectedValueException('The given path is invalid');
-        }   
+        }
         if ( ! $dir ) {
             throw new UnexpectedValueException('The given path could not be found');
         }
