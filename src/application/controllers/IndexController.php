@@ -60,10 +60,10 @@ class IndexController extends Zend_Controller_Action
                    'order'      => -100,
                   );
             $dirs['pages'] = $this->_getDirectories($iterator);
-            $result = array($dirs);
+            $result = new Zend_Navigation(array($dirs));
             $cache->save($result,'navigation');
         }
-        Zend_Registry::set('Zend_Navigation',new Zend_Navigation($result));
+        Zend_Registry::set('Zend_Navigation',$result);
     }
 
     protected function _getDirectories($iterator)
