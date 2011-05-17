@@ -30,6 +30,13 @@
 ;; This is the path where all your images are stored currently
 imagepath = /path/to/your/images
 ;;
+;; Options for caching
+cache.frontend = "Core"
+cache.backend  = "File"
+cache.frontendOptions.lifetime = 7200
+cache.frontendOptions.automatic_serialization = true
+cache.backendOptions.cache_dir = APPLICATION_PATH "/../tmp"
+;;
 ;; Where is your imagemagick installed
 imagemagick_path = "/usr/bin"
 

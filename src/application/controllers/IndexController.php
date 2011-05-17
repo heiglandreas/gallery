@@ -47,18 +47,23 @@ class IndexController extends Zend_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
-        $path = realpath(Zend_Registry::get('gallery_config')->imagepath);
+        $cache = Zend_Registry::get('Zend_Cache');
+        if(!$result=$cache->load('navigation')){
+            $path = realpath(Zend_Registry::get('gallery_config')->imagepath);
 
-        $iterator = new RecursiveDirectoryIterator($path);
-        $dirs=array (
-               'label'      => 'Home',
-               'module'     => 'default',
-               'controller' => 'index',
-               'action'     => 'index',
-               'order'      => -100,
-              );
-        $dirs['pages'] = $this->_getDirectories($iterator);
-        Zend_Registry::set('Zend_Navigation',new Zend_Navigation(array ($dirs)));
+            $iterator = new RecursiveDirectoryIterator($path);
+            $dirs=array (
+                   'label'      => 'Home',
+                   'module'     => 'default',
+                   'controller' => 'index',
+                   'action'     => 'index',
+                   'order'      => -100,
+                  );
+            $dirs['pages'] = $this->_getDirectories($iterator);
+            $result = array($dirs);
+            $cache->save($result,'navigation');
+        }
+        Zend_Registry::set('Zend_Navigation',new Zend_Navigation($result));
     }
 
     protected function _getDirectories($iterator)
